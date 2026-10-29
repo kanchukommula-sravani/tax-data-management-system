@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if transaction else 'Add' }} transaction{% endblock %}
+{% block heading %}{{ 'Edit transaction' if transaction else 'Add transaction' }}{% endblock %}
+{% block content %}
+<section class="form-layout">
+  <div class="panel form-panel"><div class="panel-heading"><div><h2>Transaction details</h2><p>Enter the sample financial record below.</p></div></div>
+  <form method="post" class="transaction-form">
+    <label>Transaction date <input type="date" name="transaction_date" required value="{{ transaction.transaction_date.isoformat() if transaction else today }}"></label>
+    <label>Description <input type="text" name="description" maxlength="160" required placeholder="e.g. Consulting service" value="{{ transaction.description if transaction else '' }}"></label>
+    <label>Category <select name="category" required><option value="">Choose a category</option>{% for c in ['Sales','Services','Expenses','Consulting','Other'] %}<option value="{{ c }}" {% if transaction and transaction.category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></label>
+    <div class="form-row"><label>Taxable amount (₹) <input type="number" name="taxable_amount" min="0" step="0.01" required placeholder="0.00" value="{{ transaction.taxable_amount if transaction else '' }}"></label>
+    <label>Sample tax rate (%) <input type="number" name="tax_rate" min="0" max="100" step="0.01" required placeholder="e.g. 5" value="{{ transaction.tax_rate if transaction else '0.00' }}"></label></div>
+    <div class="notice"><strong>Demonstration only:</strong> Tax is calculated as taxable amount × entered rate ÷ 100. This does not determine the legally applicable rate or replace professional tax advice.</div>
+    <div class="form-actions"><a class="button secondary" href="{{ url_for('transactions') }}">Cancel</a><button class="button primary" type="submit">{{ 'Save changes' if transaction else 'Save transaction' }}</button></div>
+  </form></div>
+  <aside class="help-card"><div class="help-icon">✓</div><h3>Data validation</h3><p>The application checks required fields, date format, non-negative amounts, and rates between 0 and 100.</p><h3>Automatic calculation</h3><p>Calculated tax is stored with the transaction and recalculated when you edit it.</p></aside>
+</section>
+{% endblock %}

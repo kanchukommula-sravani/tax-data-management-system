@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Monthly reports{% endblock %}
+{% block heading %}Monthly reports{% endblock %}
+{% block content %}
+<section class="panel"><div class="panel-heading"><div><h2>Monthly summary</h2><p>Aggregated transaction count and totals by month.</p></div><a class="button secondary" href="{{ url_for('export_csv') }}">⇩ Export CSV</a></div>
+{% if rows %}<div class="table-wrap"><table><thead><tr><th>Month</th><th>Transactions</th><th>Total taxable amount</th><th>Total calculated tax</th></tr></thead><tbody>{% for row in rows %}<tr><td class="strong">{{ row.month or 'Unknown' }}</td><td>{{ row.count }}</td><td>₹{{ "{:,.2f}".format(row.taxable or 0) }}</td><td class="strong">₹{{ "{:,.2f}".format(row.tax or 0) }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><div class="empty-icon">▥</div><h3>No report data yet</h3><p>Add transactions to generate a monthly report.</p></div>{% endif %}
+</section>
+{% endblock %}

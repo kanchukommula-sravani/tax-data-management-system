@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TaxTrack{% endblock %} | Tax Data Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">T</span> TaxTrack</a>
+    <p class="nav-label">WORKSPACE</p>
+    <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+    <a class="nav-link {% if request.endpoint in ['transactions', 'new_transaction', 'edit_transaction'] %}active{% endif %}" href="{{ url_for('transactions') }}">▤ &nbsp; Transactions</a>
+    <a class="nav-link {% if request.endpoint == 'monthly_report' %}active{% endif %}" href="{{ url_for('monthly_report') }}">▥ &nbsp; Monthly reports</a>
+    <a class="nav-link" href="{{ url_for('export_csv') }}">⇩ &nbsp; Export CSV</a>
+    <div class="sidebar-note"><strong>Demo workspace</strong><p>Use sample data only. This project is for learning and portfolio demonstration.</p></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">FINANCE OPERATIONS</span><h1>{% block heading %}Dashboard{% endblock %}</h1></div><a class="button primary" href="{{ url_for('new_transaction') }}">＋ Add transaction</a></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="messages">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    <footer>TaxTrack · Portfolio demonstration · Not a tax filing or compliance tool</footer>
+  </main>
+</body>
+</html>
